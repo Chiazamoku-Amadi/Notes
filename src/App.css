@@ -1,0 +1,11 @@
+.search::placeholder {
+  color: #9ca3af;
+}
+
+.search:focus {
+  color: #000000;
+}
+
+.fa-magnifying-glass {
+  color: #9ca3af;
+}
