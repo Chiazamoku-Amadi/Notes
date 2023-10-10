@@ -12,14 +12,14 @@ const AllNotes = () => {
   }
 
   return (
-    <div className="bg-rose-400 p-8 h-screen">
+    <div className="bg-slate-50 p-8 h-screen">
       <header className="flex flex-col md:flex-row md:justify-between gap-4 w-full">
         <div className="flex justify-start items-center gap-6">
           <FontAwesomeIcon icon="fa-solid fa-bars" />
           <h2 className="text-xl font-semibold pt-0.5">All Notes</h2>
         </div>
 
-        <div className="flex justify-start items-center gap-2 bg-white text-sm font-medium p-2 rounded-xl md:w-3/12">
+        <div className="flex justify-start items-center gap-2 bg-white text-sm font-medium p-2 rounded-xl shadow-lg md:w-3/12">
           <label htmlFor="search">
             <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
           </label>
