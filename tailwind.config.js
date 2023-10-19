@@ -6,9 +6,9 @@ export default {
       colors: {
         "app-color": "#B931FC",
       },
-    },
-    fontSize: {
-      small: "12px",
+      fontSize: {
+        small: "10px",
+      },
     },
   },
   plugins: [],
