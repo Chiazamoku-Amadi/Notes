@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { nanoid } from "nanoid";
 
 const AllNotes = () => {
   const month = new Date().getMonth() + 1;
@@ -19,10 +20,9 @@ const AllNotes = () => {
   const [searchData, setSearchData] = useState({ search: "" });
   const [categories, setCategories] = useState([
     {
-      id: 1,
+      id: nanoid(),
       title: "Personal",
       content: [],
-      // image: <FaUser />,
       image: (
         <FontAwesomeIcon
           icon="fa-solid fa-user"
@@ -32,7 +32,7 @@ const AllNotes = () => {
       ),
     },
     {
-      id: 2,
+      id: nanoid(),
       title: "Work",
       content: [],
       image: (
@@ -44,7 +44,7 @@ const AllNotes = () => {
       ),
     },
     {
-      id: 3,
+      id: nanoid(),
       title: "Travel",
       content: [],
       image: (
@@ -56,7 +56,7 @@ const AllNotes = () => {
       ),
     },
     {
-      id: 4,
+      id: nanoid(),
       title: "Health",
       content: [],
       image: (
@@ -71,7 +71,7 @@ const AllNotes = () => {
 
   const [allNotes, setAllNotes] = useState([
     {
-      id: 1,
+      id: nanoid(),
       title: "Team Meeting",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ut exercitationem, incidunt asperiores recusandae placeat nostrum accusamus dolor neque cupiditate.",
@@ -80,7 +80,7 @@ const AllNotes = () => {
       menu: <FontAwesomeIcon icon="fa-solid fa-ellipsis" />,
     },
     {
-      id: 2,
+      id: nanoid(),
       title: "Team Meeting",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ut exercitationem, incidunt asperiores recusandae placeat nostrum accusamus dolor neque cupiditate.",
@@ -89,7 +89,7 @@ const AllNotes = () => {
       menu: <FontAwesomeIcon icon="fa-solid fa-ellipsis" />,
     },
     {
-      id: 3,
+      id: nanoid(),
       title: "Team Meeting",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ut exercitationem, incidunt asperiores recusandae placeat nostrum accusamus dolor neque cupiditate.",
@@ -98,7 +98,7 @@ const AllNotes = () => {
       menu: <FontAwesomeIcon icon="fa-solid fa-ellipsis" />,
     },
     {
-      id: 4,
+      id: nanoid(),
       title: "Team Meeting",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ut exercitationem, incidunt asperiores recusandae placeat nostrum accusamus dolor neque cupiditate.",
@@ -129,6 +129,22 @@ const AllNotes = () => {
     );
   });
 
+  function createCategory() {
+    const newCategory = {
+      id: nanoid(),
+      title: "Title",
+      content: [],
+      image: (
+        <FontAwesomeIcon
+          icon="fa-solid fa-user"
+          size="lg"
+          style={{ color: "#b931fc", fontSize: "24px" }}
+        />
+      ),
+    };
+    setCategories((prevCategories) => [...prevCategories, newCategory]);
+  }
+
   let notes = allNotes.map((note) => {
     return (
       <div
@@ -148,6 +164,19 @@ const AllNotes = () => {
       </div>
     );
   });
+
+  function createNote() {
+    const newNote = {
+      id: nanoid(),
+      title: "Team Meeting",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ut exercitationem, incidunt asperiores recusandae placeat nostrum accusamus dolor neque cupiditate.",
+      date: `${day}/${month}`,
+      time: `${hour}:${minute}`,
+      menu: <FontAwesomeIcon icon="fa-solid fa-ellipsis" />,
+    };
+    setAllNotes((prevAllNotes) => [...prevAllNotes, newNote]);
+  }
 
   return (
     <div className="bg-slate-50 p-8 w-full">
@@ -177,7 +206,10 @@ const AllNotes = () => {
         <h3 className="text-base font-bold">Categories</h3>
         <div className="flex justify-start items-center gap-5 md:gap-8 flex-wrap py-4 w-full">
           {category}
-          <button className="bg-white p-3 self-start rounded shadow-lg">
+          <button
+            onClick={createCategory}
+            className="bg-white p-3 self-start rounded shadow-lg"
+          >
             {plusIcon}
           </button>
         </div>
@@ -188,7 +220,10 @@ const AllNotes = () => {
       </section>
 
       <span className="flex justify-end items-center w-full md:w-1/2">
-        <button className="bg-white mt-12 p-3 rounded-full shadow-lg">
+        <button
+          onClick={createNote}
+          className="bg-white mt-12 p-3 rounded-full shadow-lg"
+        >
           {plusIcon}
         </button>
       </span>
