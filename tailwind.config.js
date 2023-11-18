@@ -2,14 +2,7 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {
-      colors: {
-        "app-color": "#B931FC",
-      },
-      fontSize: {
-        small: "10px",
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };
