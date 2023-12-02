@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const AllNotes = ({ notes, openNewNote }) => {
+const AllNotes = ({ notes, openNote }) => {
   const plusIcon = (
     <FontAwesomeIcon
       icon="fa-solid fa-plus"
@@ -141,7 +141,7 @@ const AllNotes = ({ notes, openNewNote }) => {
 
       <span className="flex justify-end items-center w-full md:w-1/2">
         <button
-          onClick={openNewNote}
+          onClick={() => openNote(null)}
           className="bg-white mt-12 p-3 rounded-full shadow-lg"
         >
           {plusIcon}
@@ -154,7 +154,7 @@ const AllNotes = ({ notes, openNewNote }) => {
 // PropTypes Validation for AllNotes Component
 AllNotes.propTypes = {
   notes: PropTypes.array,
-  openNewNote: PropTypes.func,
+  openNote: PropTypes.func,
 };
 
 export default AllNotes;
