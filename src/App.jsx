@@ -3,7 +3,7 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import "./App.css";
 import Modal from "./Components/Modal";
 import AllNotes from "./Components/AllNotes";
-import Landing from "./Components/Landing";
+// import Landing from "./Components/Landing";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { useState } from "react";
 
@@ -11,22 +11,34 @@ library.add(fas);
 
 function App() {
   const [allNotes, setAllNotes] = useState([]);
-
-  let curNoteId = allNotes[0] ? allNotes[0].id : "";
-  const [currentNoteId, setCurrentNoteId] = useState(curNoteId);
-  const [openNewNoteModal, setOpenNewNoteModal] = useState(false);
-  const [noteData, setNoteData] = useState({ title: "", description: "" });
+  const [currentNoteId, setCurrentNoteId] = useState(null);
+  const [handleModal, setHandleModal] = useState(false);
+  const [noteData, setNoteData] = useState({
+    title: "",
+    description: "",
+  });
 
   let notes = allNotes.map((note, index) => {
     return (
       <div
         key={index}
-        className="flex justify-between items-center bg-white p-3 rounded-xl shadow-lg w-full md:w-1/2 cursor-pointer"
+        className={`flex justify-between items-center ${
+          index == currentNoteId ? "bg-[#B931FC]" : "bg-white"
+        } p-3 rounded-xl shadow-lg w-full md:w-1/2 cursor-pointer`}
+        onClick={() => {
+          openNote(index);
+        }}
       >
         <div className="flex flex-col justify-center items-start gap-2">
           <h4 className="text-xs font-bold">{note.title}</h4>
-          <p className="text-[10px] text-zinc-400">
-            {note.description.slice(0, 31) + "..."}
+          <p
+            className={`text-[10px] ${
+              index == currentNoteId ? "text-white" : "text-zinc-400"
+            } `}
+          >
+            {note.description.length <= 31
+              ? note.description
+              : note.description.slice(0, 31) + "..."}
           </p>
         </div>
         <div className="flex flex-col justify-center items-start gap-2">
@@ -37,29 +49,30 @@ function App() {
     );
   });
 
-  function openNewNote() {
-    setOpenNewNoteModal(true);
-    noteData.title = "";
-    noteData.description = "";
+  function openNote(id) {
+    setCurrentNoteId(id);
+    setHandleModal(true);
+    setNoteData(id !== null ? allNotes[id] : { title: "", description: "" });
   }
 
-  function closeNewNote() {
-    setOpenNewNoteModal(false);
+  function closeNote() {
+    setHandleModal(false);
+    setNoteData({ title: "", description: "" });
   }
 
   return (
     <div className="relative">
-      <Landing />
-      <AllNotes notes={notes} openNewNote={openNewNote} />
+      {/* <Landing /> */}
+      <AllNotes notes={notes} openNote={openNote} />
       {createPortal(
         <Modal
           allNotes={allNotes}
-          openNewNoteModal={openNewNoteModal}
-          closeNewNote={closeNewNote}
+          handleModal={handleModal}
+          closeNote={closeNote}
           noteData={noteData}
           setNoteData={setNoteData}
           setAllNotes={setAllNotes}
-          setCurrentNoteId={setCurrentNoteId}
+          currentNoteId={currentNoteId}
         />,
         document.getElementById("portal")
       )}

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaRegCircleCheck } from "react-icons/fa6";
@@ -7,17 +8,34 @@ import { BsAlarmFill } from "react-icons/bs";
 
 const Modal = ({
   allNotes,
-  openNewNoteModal,
-  closeNewNote,
+  handleModal,
+  closeNote,
   noteData,
   setNoteData,
   setAllNotes,
-  setCurrentNoteId,
+  currentNoteId,
 }) => {
+  const titleInputRef = useRef(null);
+  const descriptionInputRef = useRef(null);
+
   const month = new Date().getMonth() + 1;
   const day = new Date().getDate();
   const hour = new Date().getHours();
   const minute = new Date().getMinutes();
+  const newNote = {
+    id: 0,
+    title: noteData.title,
+    description: noteData.description,
+    date: `${day}/${month}`,
+    time: `${hour}:${minute}`,
+    menu: <FontAwesomeIcon icon="fa-solid fa-ellipsis" />,
+  };
+
+  useEffect(() => {
+    if (handleModal && titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, [handleModal]);
 
   function handleChange(event) {
     setNoteData((prevNoteData) => {
@@ -28,30 +46,36 @@ const Modal = ({
     });
   }
 
-  function createNote() {
-    const newNote = {
-      id: 0,
-      title: noteData.title,
-      description: noteData.description,
-      date: `${day}/${month}`,
-      time: `${hour}:${minute}`,
-      menu: <FontAwesomeIcon icon="fa-solid fa-ellipsis" />,
-    };
-    console.log(allNotes);
-
-    setAllNotes((prevAllNotes) => [newNote, ...prevAllNotes]);
-    setCurrentNoteId(newNote.id);
-    allNotes.map((note, index) => {
-      note.id = index + 1; // Why did I have to add "+ 1" before it worked?
-    });
-
-    console.log(allNotes); // Why does this not work properly? Why does it work properly only outside the func?
+  function handleNotes() {
+    if (noteData.description || noteData.title) {
+      const updatedNotes = [...allNotes];
+      if (currentNoteId !== null) {
+        const existingNote = updatedNotes[currentNoteId];
+        if (
+          existingNote.title !== noteData.title ||
+          existingNote.description !== noteData.description
+        ) {
+          Object.assign(updatedNotes[currentNoteId], noteData);
+          const currentNote = updatedNotes.splice(currentNoteId, 1)[0];
+          updatedNotes.splice(0, 0, currentNote);
+        }
+      } else {
+        updatedNotes.unshift(Object.assign(newNote, noteData));
+      }
+      setAllNotes(updatedNotes);
+    }
+    closeNote();
   }
-  console.log(allNotes);
+
+  function saveNote() {
+    if (document.activeElement.tagName === "INPUT") {
+      document.activeElement.blur();
+    }
+  }
 
   return (
     <>
-      {openNewNoteModal ? (
+      {handleModal ? (
         <>
           <div className="p-8 w-full h-full fixed top-0 left-0 bg-neutral-700 opacity-50 z-50" />
           <div className="bg-slate-50 flex flex-col justify-start items-start gap-6 p-6 md:p-8 rounded-2xl w-3/4 h-auto fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
@@ -59,10 +83,7 @@ const Modal = ({
               <div className="flex justify-between items-center gap-6">
                 <FontAwesomeIcon
                   icon="fa-solid fa-arrow-left"
-                  onClick={() => {
-                    closeNewNote();
-                    createNote();
-                  }}
+                  onClick={() => handleNotes()}
                   size="sm"
                   style={{ cursor: "pointer" }}
                 />
@@ -70,6 +91,7 @@ const Modal = ({
               </div>
               <FontAwesomeIcon
                 icon="fa-solid fa-check"
+                onClick={saveNote}
                 size="sm"
                 style={{ cursor: "pointer" }}
               />
@@ -83,6 +105,7 @@ const Modal = ({
                 name="title"
                 value={noteData.title}
                 onChange={handleChange}
+                ref={titleInputRef}
                 id="title"
                 placeholder="Title"
                 cols="30"
@@ -99,6 +122,7 @@ const Modal = ({
                 name="description"
                 value={noteData.description}
                 onChange={handleChange}
+                ref={descriptionInputRef}
                 id="description"
                 placeholder="Note something down"
                 cols="30"
@@ -143,12 +167,12 @@ const Modal = ({
 // PropTypes Validation for Modal Component
 Modal.propTypes = {
   allNotes: PropTypes.array,
-  closeNewNote: PropTypes.func,
-  openNewNoteModal: PropTypes.bool,
+  handleModal: PropTypes.bool,
+  closeNote: PropTypes.func,
   noteData: PropTypes.object,
   setNoteData: PropTypes.func,
   setAllNotes: PropTypes.func,
-  setCurrentNoteId: PropTypes.func,
+  currentNoteId: PropTypes.number,
 };
 
 export default Modal;
