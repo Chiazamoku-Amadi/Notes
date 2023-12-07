@@ -11,5 +11,6 @@
 @layer base {
   html {
     font-family: "Laila", system-ui, sans-serif;
+    background-color: #f8fafc;
   }
 }

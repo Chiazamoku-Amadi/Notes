@@ -92,7 +92,7 @@ const AllNotes = ({
   }
 
   return (
-    <div className="bg-slate-50 p-8 w-full z-0 relative">
+    <div className="p-8 w-full z-0 relative">
       <header className="flex flex-col md:flex-row md:justify-between gap-4 w-full">
         <div className="flex justify-start items-center gap-6">
           <FontAwesomeIcon icon="fa-solid fa-bars" />
