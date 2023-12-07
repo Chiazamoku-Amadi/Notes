@@ -2,26 +2,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const AllNotes = ({ notes, openNote }) => {
-  const plusIcon = (
-    <FontAwesomeIcon
-      icon="fa-solid fa-plus"
-      size="lg"
-      style={{
-        color: "#a1a1aa",
-      }}
-    />
-  );
+const AllNotes = ({
+  notes,
+  openNote,
+  selectedNotes,
+  selectAll,
+  handleIsSelected,
+  deleteSelectedNotes,
+  searchQuery,
+  handleSearch,
+}) => {
+  const plusIcon = <FontAwesomeIcon icon="fa-solid fa-plus" size="lg" />;
 
-  const [searchData, setSearchData] = useState({ search: "" });
-
-  function handleSearch(event) {
-    const { name, value } = event.target;
-    setSearchData((prevSearchData) => {
-      return { ...prevSearchData, [name]: value };
-    });
-  }
-
+  // Dummy categories
   const [categories, setCategories] = useState([
     {
       title: "Personal",
@@ -106,6 +99,7 @@ const AllNotes = ({ notes, openNote }) => {
           <h2 className="text-xl font-bold pt-0.5">All Notes</h2>
         </div>
 
+        {/* Search bar */}
         <div className="flex justify-start items-center gap-2 bg-white text-sm font-medium p-2 rounded-xl shadow-lg md:w-3/12">
           <label htmlFor="search">
             <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
@@ -114,35 +108,67 @@ const AllNotes = ({ notes, openNote }) => {
             type="search"
             placeholder="Search notes"
             onChange={handleSearch}
-            name="search"
-            value={searchData.search}
+            value={searchQuery}
             id="search"
             className="search outline-none w-full"
           />
         </div>
       </header>
 
+      {/* Category section */}
       <section className="mt-8 w-full">
         <h3 className="text-base font-bold">Categories</h3>
         <div className="flex justify-start items-center gap-5 md:gap-8 flex-wrap py-4 w-full">
           {category}
           <button
             onClick={createCategory}
-            className="bg-white p-3 self-start rounded shadow-lg"
+            className="plus bg-white hover:bg-[#B931FC] hover:fill-white p-3 self-start rounded shadow-lg"
           >
             {plusIcon}
           </button>
         </div>
       </section>
 
-      <section className="flex flex-col justify-center items-start gap-4 mt-8 w-full">
+      <section className="flex flex-col justify-center items-start gap-8 mt-8 w-full">
+        {selectedNotes.length !== 0 ? (
+          <div className="flex justify-end items-center gap-4 w-full md:w-1/2">
+            {/* For deleting multiple notes */}
+            <div className="flex justify-center items-center gap-2">
+              <p className="text-xs font-bold">Delete Selected</p>
+              <FontAwesomeIcon
+                icon="fa-regular fa-trash-can"
+                size="xs"
+                onClick={() => deleteSelectedNotes()}
+                className="icons cursor-pointer"
+              />
+            </div>
+
+            {/* For bulk selection */}
+            <div className="flex justify-center items-center gap-2 pr-3">
+              <label htmlFor="selectAll" className="text-xs font-bold">
+                Select All
+              </label>
+              <input
+                type="checkbox"
+                id="selectAll"
+                // Passed "all" as an argument to handleIsSelected just to signify ALL notes. "all" is the value of "index"(the func. parameter)
+                onChange={() => handleIsSelected("all")}
+                checked={selectAll}
+                className="cursor-pointer"
+              />
+            </div>
+          </div>
+        ) : null}
+
+        {/* All Notes */}
         {notes}
       </section>
 
-      <span className="flex justify-end items-center w-full md:w-1/2">
+      {/* To create new note */}
+      <span className="flex justify-end items-center w-full md:w-1/2 z-0">
         <button
           onClick={() => openNote(null)}
-          className="bg-white mt-12 p-3 rounded-full shadow-lg"
+          className="plus bg-white hover:bg-[#B931FC] mt-12 p-3 rounded-full shadow-lg"
         >
           {plusIcon}
         </button>
@@ -155,6 +181,12 @@ const AllNotes = ({ notes, openNote }) => {
 AllNotes.propTypes = {
   notes: PropTypes.array,
   openNote: PropTypes.func,
+  selectedNotes: PropTypes.array,
+  selectAll: PropTypes.bool,
+  handleIsSelected: PropTypes.func,
+  deleteSelectedNotes: PropTypes.func,
+  searchQuery: PropTypes.string,
+  handleSearch: PropTypes.func,
 };
 
 export default AllNotes;

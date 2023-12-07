@@ -1,10 +1,6 @@
 import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaRegCircleCheck } from "react-icons/fa6";
-import { FaMicrophone } from "react-icons/fa6";
-import { FaRegImage } from "react-icons/fa6";
-import { BsAlarmFill } from "react-icons/bs";
 
 const Modal = ({
   allNotes,
@@ -15,6 +11,7 @@ const Modal = ({
   setAllNotes,
   currentNoteId,
 }) => {
+  // Creates references to title and description input fields
   const titleInputRef = useRef(null);
   const descriptionInputRef = useRef(null);
 
@@ -31,6 +28,7 @@ const Modal = ({
     menu: <FontAwesomeIcon icon="fa-solid fa-ellipsis" />,
   };
 
+  // Used useEffect to focus the title field when handleModal state changes
   useEffect(() => {
     if (handleModal && titleInputRef.current) {
       titleInputRef.current.focus();
@@ -48,25 +46,28 @@ const Modal = ({
 
   function handleNotes() {
     if (noteData.description || noteData.title) {
-      const updatedNotes = [...allNotes];
+      const updatedNotes = [...allNotes]; // To avoid mutating the state
+      // Check if editing an existing note
       if (currentNoteId !== null) {
-        const existingNote = updatedNotes[currentNoteId];
+        const existingNote = updatedNotes[currentNoteId]; // Get the existing note at the currentNoteId index
+        // Check if title or description of existing note has changed
         if (
           existingNote.title !== noteData.title ||
           existingNote.description !== noteData.description
         ) {
-          Object.assign(updatedNotes[currentNoteId], noteData);
-          const currentNote = updatedNotes.splice(currentNoteId, 1)[0];
-          updatedNotes.splice(0, 0, currentNote);
+          Object.assign(updatedNotes[currentNoteId], noteData); // Updates the existing note with new title and description
+          const currentNote = updatedNotes.splice(currentNoteId, 1)[0]; // Removes existing note from its current position
+          updatedNotes.splice(0, 0, currentNote); // Inserts the updated note at the beginning of the updatedNotes array
         }
       } else {
-        updatedNotes.unshift(Object.assign(newNote, noteData));
+        updatedNotes.unshift(Object.assign(newNote, noteData)); // Merges newNote with noteData, then adds it to the beginning of the updatedNotes array
       }
       setAllNotes(updatedNotes);
     }
     closeNote();
   }
 
+  // This unfocuses any focused INPUT field
   function saveNote() {
     if (document.activeElement.tagName === "INPUT") {
       document.activeElement.blur();
@@ -86,6 +87,7 @@ const Modal = ({
                   onClick={() => handleNotes()}
                   size="sm"
                   style={{ cursor: "pointer" }}
+                  className="icons"
                 />
                 <h2 className="text-lg md:text-xl font-bold">Add Notes</h2>
               </div>
@@ -94,9 +96,11 @@ const Modal = ({
                 onClick={saveNote}
                 size="sm"
                 style={{ cursor: "pointer" }}
+                className="icons"
               />
             </header>
 
+            {/* Title Field */}
             <section className="flex flex-col justify-start items-start gap-2 w-full">
               <label htmlFor="title" className="text-sm md:text-base font-bold">
                 Title
@@ -114,6 +118,7 @@ const Modal = ({
               />
             </section>
 
+            {/* Description Field */}
             <section className="flex flex-col justify-center items-start gap-2 w-full">
               <label htmlFor="title" className="text-sm md:text-base font-bold">
                 Description
@@ -130,33 +135,6 @@ const Modal = ({
                 className="w-full p-2 rounded shadow-lg outline-none border-none resize-none overflow-hidden text-xs md:text-sm"
               />
             </section>
-
-            <footer className="flex justify-between items-center mt-8 w-full">
-              <div className="flex flex-col justify-center items-center gap-1">
-                <FaRegCircleCheck className="text-slate-500 text-xs md:text-base" />
-                <p className="text-slate-500 text-xs md:text-base font-bold">
-                  To-do
-                </p>
-              </div>
-              <div className="flex flex-col justify-center items-center gap-1">
-                <FaMicrophone className="text-slate-500 text-xs md:text-base" />
-                <p className="text-slate-500 text-xs md:text-base font-bold">
-                  Audio
-                </p>
-              </div>
-              <div className="flex flex-col justify-center items-center gap-1">
-                <FaRegImage className="text-slate-500 text-xs md:text-base" />
-                <p className="text-slate-500 text-xs md:text-base font-bold">
-                  Image
-                </p>
-              </div>
-              <div className="flex flex-col justify-center items-center gap-1">
-                <BsAlarmFill className="text-slate-500 text-xs md:text-base" />
-                <p className="text-slate-500 text-xs md:text-base font-bold">
-                  Reminder
-                </p>
-              </div>
-            </footer>
           </div>
         </>
       ) : null}

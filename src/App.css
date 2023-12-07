@@ -13,3 +13,33 @@
 .fa-magnifying-glass {
   color: #9ca3af;
 }
+
+.plus {
+  color: #a1a1aa;
+}
+
+.plus:hover {
+  color: #fff;
+}
+
+.icons {
+  color: #000;
+}
+
+.icons:hover {
+  color: #b931fc;
+}
+
+.delete {
+  visibility: hidden;
+}
+
+.note:hover .delete {
+  visibility: visible;
+}
+
+@media (max-width: 767px) {
+  .delete {
+    visibility: visible;
+  }
+}
