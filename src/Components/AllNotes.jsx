@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 import PropTypes from "prop-types";
 
 const AllNotes = ({
@@ -15,10 +14,9 @@ const AllNotes = ({
   const plusIcon = <FontAwesomeIcon icon="fa-solid fa-plus" size="lg" />;
 
   // Dummy categories
-  const [categories, setCategories] = useState([
+  const categories = [
     {
       title: "Personal",
-      content: [],
       image: (
         <FontAwesomeIcon
           icon="fa-solid fa-user"
@@ -29,7 +27,6 @@ const AllNotes = ({
     },
     {
       title: "Work",
-      content: [],
       image: (
         <FontAwesomeIcon
           icon="fa-solid fa-briefcase"
@@ -40,7 +37,6 @@ const AllNotes = ({
     },
     {
       title: "Travel",
-      content: [],
       image: (
         <FontAwesomeIcon
           icon="fa-solid fa-car"
@@ -51,7 +47,6 @@ const AllNotes = ({
     },
     {
       title: "Health",
-      content: [],
       image: (
         <FontAwesomeIcon
           icon="fa-solid fa-capsules"
@@ -60,13 +55,13 @@ const AllNotes = ({
         />
       ),
     },
-  ]);
+  ];
 
   let category = categories.map((category, index) => {
     return (
       <div
         key={index}
-        className="flex flex-col justify-center items-center gap-2 cursor-pointer"
+        className="flex flex-col justify-center items-center gap-2"
       >
         <span className="bg-zinc-200 p-3 rounded shadow-lg">
           {category.image}
@@ -75,21 +70,6 @@ const AllNotes = ({
       </div>
     );
   });
-
-  function createCategory() {
-    const newCategory = {
-      title: "Title",
-      content: [],
-      image: (
-        <FontAwesomeIcon
-          icon="fa-solid fa-user"
-          size="lg"
-          style={{ color: "#b931fc", fontSize: "24px" }}
-        />
-      ),
-    };
-    setCategories((prevCategories) => [...prevCategories, newCategory]);
-  }
 
   return (
     <div className="p-8 w-full z-0 relative">
@@ -120,12 +100,6 @@ const AllNotes = ({
         <h3 className="text-base font-bold">Categories</h3>
         <div className="flex justify-start items-center gap-5 md:gap-8 flex-wrap py-4 w-full">
           {category}
-          <button
-            onClick={createCategory}
-            className="plus bg-white hover:bg-[#B931FC] hover:fill-white p-3 self-start rounded shadow-lg"
-          >
-            {plusIcon}
-          </button>
         </div>
       </section>
 
@@ -168,7 +142,7 @@ const AllNotes = ({
       <span className="flex justify-end items-center w-full md:w-1/2 z-0">
         <button
           onClick={() => openNote(null)}
-          className="plus bg-white hover:bg-[#B931FC] mt-12 p-3 rounded-full shadow-lg"
+          className="plus bg-white hover:bg-[#B931FC] mt-12 p-3 w-12 h-12 rounded-full shadow-lg"
         >
           {plusIcon}
         </button>

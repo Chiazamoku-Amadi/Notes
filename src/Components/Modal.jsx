@@ -25,7 +25,6 @@ const Modal = ({
     description: noteData.description,
     date: `${day}/${month}`,
     time: `${hour}:${minute}`,
-    menu: <FontAwesomeIcon icon="fa-solid fa-ellipsis" />,
   };
 
   // Used useEffect to focus the title field when handleModal state changes
@@ -67,13 +66,6 @@ const Modal = ({
     closeNote();
   }
 
-  // This unfocuses any focused INPUT field
-  function saveNote() {
-    if (document.activeElement.tagName === "INPUT") {
-      document.activeElement.blur();
-    }
-  }
-
   return (
     <>
       {handleModal ? (
@@ -82,18 +74,11 @@ const Modal = ({
           <div className="bg-slate-50 flex flex-col justify-start items-start gap-6 p-6 md:p-8 rounded-2xl w-3/4 h-auto fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
             <header className="flex justify-between items-center w-full">
               <div className="flex justify-between items-center gap-6">
-                <FontAwesomeIcon
-                  icon="fa-solid fa-arrow-left"
-                  onClick={() => handleNotes()}
-                  size="sm"
-                  style={{ cursor: "pointer" }}
-                  className="icons"
-                />
                 <h2 className="text-lg md:text-xl font-bold">Add Notes</h2>
               </div>
               <FontAwesomeIcon
                 icon="fa-solid fa-check"
-                onClick={saveNote}
+                onClick={() => handleNotes()}
                 size="sm"
                 style={{ cursor: "pointer" }}
                 className="icons"
@@ -120,7 +105,10 @@ const Modal = ({
 
             {/* Description Field */}
             <section className="flex flex-col justify-center items-start gap-2 w-full">
-              <label htmlFor="title" className="text-sm md:text-base font-bold">
+              <label
+                htmlFor="description"
+                className="text-sm md:text-base font-bold"
+              >
                 Description
               </label>
               <textarea
