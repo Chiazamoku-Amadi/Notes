@@ -11,7 +11,10 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 library.add(fas, far);
 
 function App() {
-  const [allNotes, setAllNotes] = useState([]);
+  const [allNotes, setAllNotes] = useState(() => {
+    const storedNotes = JSON.parse(localStorage.getItem("notes"));
+    return storedNotes || [];
+  });
   const [currentNoteId, setCurrentNoteId] = useState(null);
   const [handleModal, setHandleModal] = useState(false);
   const [noteData, setNoteData] = useState({
@@ -21,6 +24,20 @@ function App() {
   const [selectedNotes, setSelectedNotes] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Load notes from localStorage when the component mounts
+  useEffect(() => {
+    const storedNotes = JSON.parse(localStorage.getItem("notes"));
+
+    if (storedNotes) {
+      setAllNotes(storedNotes);
+    }
+  }, []);
+
+  // Save notes to localStorage whenever allNotes changes
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(allNotes));
+  }, [allNotes]);
 
   useEffect(() => {
     const allNotesSelected = selectedNotes.length === allNotes.length;
